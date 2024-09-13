@@ -2,32 +2,32 @@ const ll maxV = 1000000;
 
 struct Seg {
     ll arr[maxV], tree[4 * maxV];
-    void I(ll N, ll s, ll e) {
+    void Init(ll N, ll s, ll e) {
         if (s == e) {
             tree[N] = arr[s];
             return;
         }
         ll mid = (s + e) / 2;
-        I(N * 2, s, mid);
-        I(N * 2 + 1, mid + 1, e);
+        Init(N * 2, s, mid);
+        Init(N * 2 + 1, mid + 1, e);
         tree[N] = tree[N * 2] + tree[N * 2 + 1];
     }
-    void U(ll N, ll s, ll e, ll idx, ll val) {
+    void Update(ll N, ll s, ll e, ll idx, ll val) {
         if (s == e) {
             if (s == idx) tree[N] = val;
             return;
         }
         ll mid = (s + e) / 2;
         if (idx <= mid)
-            U(N * 2, s, mid, idx, val);
+            Update(N * 2, s, mid, idx, val);
         else
-            U(N * 2 + 1, mid + 1, e, idx, val);
+            Update(N * 2 + 1, mid + 1, e, idx, val);
         tree[N] = tree[N * 2] + tree[N * 2 + 1];
     }
-    ll Q(ll N, ll s, ll e, ll l, ll r) {
+    ll Query(ll N, ll s, ll e, ll l, ll r) {
         if (r < s || e < l) return 0;
         if (l <= s && e <= r) return tree[N];
         ll mid = (s + e) / 2;
-        return Q(N * 2, s, mid, l, r) + Q(N * 2 + 1, mid + 1, e, l, r);
+        return Query(N * 2, s, mid, l, r) + Query(N * 2 + 1, mid + 1, e, l, r);
     }
 };
