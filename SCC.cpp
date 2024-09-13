@@ -5,12 +5,12 @@ ll n, m, u, v, id, SN;
 vector<ll> adj[MAXN];
 stack<ll> st;
 
-ll D(ll x) {
+ll DFS(ll x) {
     vis[x] = ++id;
     st.push(x);
     ll par = vis[x];
     for (auto i : adj[x]) {
-        if (!vis[i]) par = min(par, D(i));
+        if (!vis[i]) par = min(par, DFS(i));
         else if (!fin[i]) par = min(par, vis[i]);
     }
     if (par == vis[x]) {
