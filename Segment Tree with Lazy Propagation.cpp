@@ -2,18 +2,18 @@ const ll maxV = 1000000;
 
 struct LazySeg {
     ll arr[maxV], tree[4 * maxV], lazy[4 * maxV];
-    void I(ll N, ll s, ll e) {
+    void Init(ll N, ll s, ll e) {
         lazy[N] = 0;
         if (s == e) {
             tree[N] = arr[s];
             return;
         }
         ll mid = (s + e) / 2;
-        I(N * 2, s, mid);
-        I(N * 2 + 1, mid + 1, e);
+        Init(N * 2, s, mid);
+        Init(N * 2 + 1, mid + 1, e);
         tree[N] = tree[N * 2] + tree[N * 2 + 1];
     }
-    void L(ll N, ll s, ll e) {
+    void Lazy(ll N, ll s, ll e) {
         if (lazy[N]) {
             tree[N] += (e - s + 1) * lazy[N];
             if (s != e) {
@@ -23,24 +23,24 @@ struct LazySeg {
             lazy[N] = 0;
         }
     }
-    void U(ll N, ll s, ll e, ll l, ll r, ll val) {
-        L(N, s, e);
+    void Update(ll N, ll s, ll e, ll l, ll r, ll val) {
+        Lazy(N, s, e);
         if (e < l || r < s) return;
         if (l <= s && e <= r) {
             lazy[N] += val;
-            L(N, s, e);
+            Lazy(N, s, e);
             return;
         }
         ll mid = (s + e) / 2;
-        U(N * 2, s, mid, l, r, val);
-        U(N * 2 + 1, mid + 1, e, l, r, val);
+        Update(N * 2, s, mid, l, r, val);
+        Update(N * 2 + 1, mid + 1, e, l, r, val);
         tree[N] = tree[N * 2] + tree[N * 2 + 1];
     }
-    ll Q(ll N, ll s, ll e, ll l, ll r) {
-        L(N, s, e);
+    ll Query(ll N, ll s, ll e, ll l, ll r) {
+        Lazy(N, s, e);
         if (e < l || r < s) return 0;
         if (l <= s && e <= r) return tree[N];
         ll mid = (s + e) / 2;
-        return Q(N * 2, s, mid, l, r) + Q(N * 2 + 1, mid + 1, e, l, r);
+        return Query(N * 2, s, mid, l, r) + Query(N * 2 + 1, mid + 1, e, l, r);
     }
 };
