@@ -36,7 +36,6 @@ int main() {
     adj.resize(n), dep.resize(n), eul.resize(n);
     idx.resize(2 * n), lg2.resize(2 * n);
     dp.resize(22, vector<pair<ll, ll>>(2 * n));
-
     Dfs(1), Init();
 
     return 0;
