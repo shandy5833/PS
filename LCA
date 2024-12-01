@@ -1,42 +1,27 @@
-vector<ll> dep, eul, idx, lg2;
-vector<vector<pair<ll, ll>>> dp;
-vector<vector<ll>> adj;
-ll n, ord;
+const ll MAXN = 1000001;
+ll par[20][MAXN], dep[MAXN];
+vector<ll> adj[MAXN];
+ll n;
 
-void Dfs(int now, int par = 0) {
-    dep[now] = dep[par] + 1;
-    idx[now] = ++ord;
-    eul[ord] = now;
-    for (int nxt : adj[now])
-        if (nxt != par) Dfs(nxt, now), eul[++ord] = now;
+void DFS(ll cur, ll prv, ll d) {
+    dep[cur] = d;
+    par[cur][0] = prv;
+    for (ll i = 1; i < 20; i++)
+        par[i][cur] = par[i - 1][par[i - 1][cur]];
+    for (ll i : adj[cur])
+        if (i != prv) DFS(i, cur, d + 1);
 }
-void Init() {
-    int j = -1;
-    for (int i = 1; i <= ord; i++) {
-        if (1 << (j + 1) == i) j++;
-        lg2[i] = j;
-    }
-    for (int i = 1; i <= ord; i++)
-        dp[0][i] = {dep[eul[i]], eul[i]};
-    for (int j = 1; j < 22; j++)
-        for (int i = 1; i + (1 << (j - 1)) <= ord; i++)
-            dp[j][i] = min(dp[j - 1][i], dp[j - 1][i + (1 << (j - 1))]);
-}
-int Lca(int u, int v) {
-    int l = idx[u], r = idx[v];
-    if (l > r) swap(l, r);
-    int len = lg2[r - l + 1];
-    return min(dp[len][l], dp[len][r - (1 << len) + 1]).second;
+ll LCA(ll x, ll y) {
+    if (dep[x] < dep[y]) swap(x, y);
+    if (dep[x] != dep[y])
+        for (ll i = 19; i >= 0; i--)
+            if (dep[par[i][x]] >= dep[y]) x = par[i][x];
+    if (x == y) return x;
+    for (ll i = 19; i >= 0; i--)
+        if (par[i][x] != par[i][y]) x = par[i][x], y = par[i][y];
+    return par[0][x];
 }
 
 int main() {
-    cin.tie(0)->sync_with_stdio(0);
-
-    cin >> n;
-    adj.resize(n), dep.resize(n), eul.resize(n);
-    idx.resize(2 * n), lg2.resize(2 * n);
-    dp.resize(22, vector<pair<ll, ll>>(2 * n));
-    Dfs(1), Init();
-
-    return 0;
+    DFS(1, 0, 1);
 }
