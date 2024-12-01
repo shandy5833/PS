@@ -15,10 +15,5 @@ ll Qry(ll l, ll r) { // query on range [l, r)
 }
 
 int main() {
-    cin.tie(0)->sync_with_stdio(0);
-
-    cin >> n;
     tree.resize(n << 2, 0);
-
-    return 0;
 }
