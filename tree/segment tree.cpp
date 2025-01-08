@@ -21,7 +21,3 @@ template <typename T> struct seg {
         return merge(lret, rret);
     }
 };
-
-/*
-
-*/
