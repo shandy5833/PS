@@ -3,7 +3,7 @@ template <typename T> struct seg {
     T id;
     vector<T> t;
     T (*merge)(T, T);
-    seg(ll N, T ID, T (*_merge)(T, T)) : n(N), id(ID), merge(_merge) {
+    seg(ll N, T ID, T (*MERGE)(T, T)) : n(N), id(ID), merge(MERGE) {
         t.resize(N << 1, id);
     }
     void update(ll p, T val) {
