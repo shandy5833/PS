@@ -1,7 +1,7 @@
 struct Trie {
     ll ed = 0;
     Trie *ch[26];
-    Trie() { fill(ch, ch + 26, nullptr); }
+    Trie() { std::fill(ch, ch + 26, nullptr); }
     ~Trie() {
         for (ll i = 0; i < 26; i++)
             if (ch[i]) delete ch[i];
