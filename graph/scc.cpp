@@ -1,20 +1,20 @@
 const ll MAXN = 101000;
 ll fin[MAXN], vis[MAXN], sn[MAXN];
-vector<vector<ll>> SCC;
-ll n, m, u, v, id, SN;
-vector<ll> adj[MAXN];
-stack<ll> st;
+std::vector<std::vector<ll>> SCC;
+std::vector<ll> adj[MAXN];
+std::stack<ll> st;
+ll n, m, id, SN;
 
-ll DFS(ll x) {
+ll dfs(ll x) {
     vis[x] = ++id;
     st.push(x);
     ll par = vis[x];
     for (auto i : adj[x]) {
-        if (!vis[i]) par = min(par, DFS(i));
-        else if (!fin[i]) par = min(par, vis[i]);
+        if (!vis[i]) par = std::min(par, dfs(i));
+        else if (!fin[i]) par = std::min(par, vis[i]);
     }
     if (par == vis[x]) {
-        vector<ll> scc;
+        std::vector<ll> scc;
         while (1) {
             ll cur = st.top();
             st.pop();
@@ -23,7 +23,7 @@ ll DFS(ll x) {
             sn[cur] = SN + 1;
             if (cur == x) break;
         }
-        sort(scc.begin(), scc.end());
+        std::sort(scc.begin(), scc.end());
         SCC.push_back(scc);
         SN++;
     }
@@ -31,13 +31,12 @@ ll DFS(ll x) {
 }
 
 int main() {
-    cin.tie(0)->sync_with_stdio(0);
+    std::cin.tie(0)->sync_with_stdio(0);
 
-    cin >> n >> m;
-    for (ll i = 0; i < m; i++)
-        cin >> u >> v, adj[u].push_back(v);
+    std::cin >> n >> m;
+    for (ll i = 0, u, v; i < m; i++) std::cin >> u >> v, adj[u].push_back(v);
     for (ll i = 1; i <= n; i++)
-        if (!vis[i]) D(i);
+        if (!vis[i]) dfs(i);
 
     return 0;
 }
