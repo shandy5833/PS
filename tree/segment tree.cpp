@@ -1,7 +1,7 @@
 template <typename T> struct seg {
     ll n;
     T id;
-    vector<T> t;
+    std::vector<T> t;
     T (*merge)(T, T);
     seg(ll N, T ID, T (*MERGE)(T, T)) : n(N), id(ID), merge(MERGE) {
         t.resize(N << 1, id);
