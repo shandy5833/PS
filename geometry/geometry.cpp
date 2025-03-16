@@ -34,20 +34,20 @@ bool intersect(pt p1, pt p2, pt p3, pt p4) {
 
 ll dist(pt a, pt b) { return (b - a).sz(); }
 
-void hull(std::vector<pt> &v) {
-    std::sort(v.begin(), v.end());
-    std::vector<pt> L, R;
-    for (pt i : v) {
-        while (L.size() >= 2 && ccw(i, L[L.size() - 1], L[L.size() - 2]) <= 0)
-            L.pop_back();
-        L.emplace_back(i);
-        while (R.size() >= 2 && ccw(i, R[R.size() - 1], R[R.size() - 2]) >= 0)
-            R.pop_back();
-        R.emplace_back(i);
+std::vector<pt> hull(std::vector<pt> v) {
+    int ix = std::min_element(v.begin(), v.end()) - v.begin();
+    std::swap(v[0], v[ix]);
+    std::vector<pt> st;
+    std::sort(v.begin() + 1, v.end(), [&](pt &a, pt &b) {
+        pt x = a - v[0], y = b - v[0];
+        return x / y ? x / y > 0 : x.sz() < y.sz();
+    });
+    for (auto &p : v) {
+        while (st.size() > 1 && ccw(st[st.size() - 2], st.back(), p) <= 0)
+            st.pop_back();
+        st.emplace_back(p);
     }
-    v.clear();
-    for (ll i = 0; i < R.size() - 1; i++) v.emplace_back(R[i]);
-    for (ll i = L.size() - 1; i > 0; i--) v.emplace_back(L[i]);
+    return st;
 }
 
 ll inside(pt p, std::vector<pt> &v) {
