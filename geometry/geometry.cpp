@@ -34,6 +34,15 @@ bool intersect(pt p1, pt p2, pt p3, pt p4) {
 
 ll dist(pt a, pt b) { return (b - a).sz(); }
 
+double linedist(pt a, pt b, pt c) {
+    pt t = b - a;
+    // 선분일 때
+    if (t * (c - a) <= 0) return sqrt(dist(a, c));
+    if (t * (c - b) >= 0) return sqrt(dist(b, c));
+    // 직선일 때
+    return abs(t / (c - a)) / sqrt(t.sz());
+}
+
 std::vector<pt> hull(std::vector<pt> v) {
     int ix = std::min_element(v.begin(), v.end()) - v.begin();
     std::swap(v[0], v[ix]);
